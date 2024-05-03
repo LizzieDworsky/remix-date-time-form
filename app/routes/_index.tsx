@@ -1,41 +1,32 @@
 import type { MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
+    return [
+        { title: "Date Time Form" },
+        {
+            name: "A date time form Created for a client of Brem.",
+            content: "A date time form Created for a client of Brem.",
+        },
+    ];
 };
 
 export default function Index() {
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
-  );
+    return (
+        <div>
+            <div>
+                <img
+                    src="../../public/images/logoipsum-329.svg"
+                    alt="company logo"
+                />
+            </div>
+            <div>
+                <h1>Book Your Appointment</h1>
+                <p>123 Anywhere Dr, Anywhere, NY 12345</p>
+            </div>
+            <div>The Form</div>
+            <div>
+                <p>We will contact you shortly</p>
+            </div>
+        </div>
+    );
 }
