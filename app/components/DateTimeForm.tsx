@@ -13,7 +13,7 @@ const DateTimeForm = ({}) => {
     );
     const [isInitialSlot, setIsInitialSlot] = useState<boolean>(true);
 
-    const handleDateChange = (date: any) => {
+    const handleDateChange = (date: Date) => {
         if (date instanceof Date) {
             setSelectedDate(date);
             setSelectedTimeSlot(null);
@@ -63,14 +63,17 @@ const DateTimeForm = ({}) => {
             <h3>Pick a Date and Time</h3>
             <Calendar
                 selectRange={false}
-                onChange={(date) => handleDateChange(date)}
+                onChange={(date) => handleDateChange(date as Date)}
                 value={selectedDate}
                 calendarType="gregory"
+                aria-label="Calendar to select appointment date."
             />
+            <label htmlFor="timezone">Change Timezone:</label>
             <select
                 id="timezone"
                 value={selectedTimeZone}
                 onChange={handleTimeZoneChange}
+                aria-label="Select your timezone."
             >
                 {timeZones.map((zone) => (
                     <option key={zone} value={zone}>
@@ -92,27 +95,36 @@ const DateTimeForm = ({}) => {
                     <button
                         key={slot}
                         onClick={() => handleTimeSlotSelection(slot)}
+                        aria-label={`Select ${slot} as the starting time.`}
                     >
                         {slot}
                     </button>
                 ))}
-                <a href="#">
-                    <p>Load More</p>
-                </a>
+                <button aria-label="No more AM slots available">
+                    Load More
+                </button>
                 <h4>PM</h4>
                 {timeSlotsPM.map((slot) => (
                     <button
                         key={slot}
                         onClick={() => handleTimeSlotSelection(slot)}
+                        aria-label={`Select ${slot} as the starting time.`}
                     >
                         {slot}
                     </button>
                 ))}
-                <a href="#" onClick={togglePMView}>
-                    <p>Load More</p>
-                </a>
+                <button
+                    onClick={togglePMView}
+                    aria-label={`Switch to ${
+                        isInitialSlot ? "later" : "earlier"
+                    } PM time slots`}
+                >
+                    Load More
+                </button>
             </div>
-            <button>Select Date</button>
+            <button aria-label="Submit the selected date and time for the appointment.">
+                Select Date
+            </button>
         </div>
     );
 };
