@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import DateTimeForm from "~/components/DateTimeForm";
+import "../styles/index.css";
 
 export const meta: MetaFunction = () => {
     return [
@@ -13,19 +14,21 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
     return (
-        <div>
-            <div>
-                <img
-                    src="/images/logoipsum-329.svg"
-                    alt="company logo placeholder"
-                />
-            </div>
-            <div>
-                <h1>Book Your Appointment</h1>
-                <p>123 Anywhere Dr, Anywhere, NY 12345</p>
+        <div className="appointment-page-content">
+            <div className="heading">
+                <div className="company-logo">
+                    <img
+                        src="/images/logoipsum-329.svg"
+                        alt="company logo placeholder"
+                    />
+                </div>
+                <div>
+                    <h1>Book Your Appointment</h1>
+                    <p>123 Anywhere Dr, Anywhere, NY 12345</p>
+                </div>
             </div>
             <DateTimeForm />
-            <div>
+            <div className="footer">
                 <p>We will contact you shortly</p>
             </div>
         </div>

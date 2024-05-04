@@ -2,6 +2,7 @@ import { useState } from "react";
 import Calendar from "react-calendar";
 import moment from "moment-timezone";
 import "react-calendar/dist/Calendar.css";
+import TimePicker from "react-time-picker";
 
 const DateTimeForm = ({}) => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -12,6 +13,16 @@ const DateTimeForm = ({}) => {
         null
     );
     const [isInitialSlot, setIsInitialSlot] = useState<boolean>(true);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tileDisabled = ({ date, view }: any): boolean => {
+        if (view === "month") {
+            return date < today;
+        }
+        return false;
+    };
 
     const handleDateChange = (date: Date) => {
         if (date instanceof Date) {
@@ -25,7 +36,7 @@ const DateTimeForm = ({}) => {
     };
     const timeZones = moment.tz.names();
 
-    const handleTimeSlotSelection = (timeSlot: string) => {
+    const handleTimeSlotSelection = (timeSlot: any) => {
         setSelectedTimeSlot(timeSlot);
     };
     const togglePMView = () => {
@@ -59,70 +70,96 @@ const DateTimeForm = ({}) => {
     const timeSlotsPM = isInitialSlot ? timeSlotsPMInitial : timeSlotsPMTwo;
 
     return (
-        <div>
-            <h3>Pick a Date and Time</h3>
-            <Calendar
-                selectRange={false}
-                onChange={(date) => handleDateChange(date as Date)}
-                value={selectedDate}
-                calendarType="gregory"
-                aria-label="Calendar to select appointment date."
-            />
-            <label htmlFor="timezone">Change Timezone:</label>
-            <select
-                id="timezone"
-                value={selectedTimeZone}
-                onChange={handleTimeZoneChange}
-                aria-label="Select your timezone."
-            >
-                {timeZones.map((zone) => (
-                    <option key={zone} value={zone}>
-                        {zone}
-                    </option>
-                ))}
-            </select>
-            {selectedDate && (
-                <h3>
-                    Available Starting times for{" "}
-                    {moment(selectedDate)
-                        .tz(selectedTimeZone)
-                        .format("ddd, MMMM D, YYYY")}
-                </h3>
-            )}
-            <div>
-                <h4>AM</h4>
-                {timeSlotsAM.map((slot) => (
-                    <button
-                        key={slot}
-                        onClick={() => handleTimeSlotSelection(slot)}
-                        aria-label={`Select ${slot} as the starting time.`}
-                    >
-                        {slot}
-                    </button>
-                ))}
-                <button aria-label="No more AM slots available">
-                    Load More
-                </button>
-                <h4>PM</h4>
-                {timeSlotsPM.map((slot) => (
-                    <button
-                        key={slot}
-                        onClick={() => handleTimeSlotSelection(slot)}
-                        aria-label={`Select ${slot} as the starting time.`}
-                    >
-                        {slot}
-                    </button>
-                ))}
-                <button
-                    onClick={togglePMView}
-                    aria-label={`Switch to ${
-                        isInitialSlot ? "later" : "earlier"
-                    } PM time slots`}
-                >
-                    Load More
-                </button>
+        <div className="date-time-form">
+            <div className="date-time-content">
+                <div>
+                    <h3>Pick a Date and Time</h3>
+                    <div className="calendar-container">
+                        <Calendar
+                            tileDisabled={tileDisabled}
+                            selectRange={false}
+                            onChange={(date) => handleDateChange(date as Date)}
+                            value={selectedDate}
+                            calendarType="gregory"
+                            aria-label="Calendar to select appointment date."
+                        />
+                        <label htmlFor="timezone">Change Timezone:</label>
+                        <select
+                            id="timezone"
+                            value={selectedTimeZone}
+                            onChange={handleTimeZoneChange}
+                            aria-label="Select your timezone."
+                        >
+                            {timeZones.map((zone) => (
+                                <option key={zone} value={zone}>
+                                    {zone}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <div className="time-slots-container">
+                    {selectedDate && (
+                        <h3>
+                            Available Starting times for{" "}
+                            {moment(selectedDate)
+                                .tz(selectedTimeZone)
+                                .format("ddd, MMMM D, YYYY")}
+                        </h3>
+                    )}
+                    <div className="time-slots-columns">
+                        <div className="time-slot">
+                            <h4>AM</h4>
+                            {timeSlotsAM.map((slot) => (
+                                <button
+                                    className="time-slot-button"
+                                    key={slot}
+                                    onClick={() =>
+                                        handleTimeSlotSelection(slot)
+                                    }
+                                    aria-label={`Select ${slot} as the starting time.`}
+                                >
+                                    {slot}
+                                </button>
+                            ))}
+                            <button
+                                className="load-more-button"
+                                aria-label="No more AM slots available"
+                            >
+                                Load More
+                            </button>
+                        </div>
+                        <div className="time-slot">
+                            <h4>PM</h4>
+                            {timeSlotsPM.map((slot) => (
+                                <button
+                                    className="time-slot-button"
+                                    key={slot}
+                                    onClick={() =>
+                                        handleTimeSlotSelection(slot)
+                                    }
+                                    aria-label={`Select ${slot} as the starting time.`}
+                                >
+                                    {slot}
+                                </button>
+                            ))}
+                            <button
+                                className="load-more-button"
+                                onClick={togglePMView}
+                                aria-label={`Switch to ${
+                                    isInitialSlot ? "later" : "earlier"
+                                } PM time slots`}
+                            >
+                                Load More
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button aria-label="Submit the selected date and time for the appointment.">
+            <button
+                className="select-date-time-btn"
+                aria-label="Submit the selected date and time for the appointment."
+            >
                 Select Date
             </button>
         </div>
