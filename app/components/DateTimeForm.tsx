@@ -2,7 +2,6 @@ import { useState } from "react";
 import Calendar from "react-calendar";
 import moment from "moment-timezone";
 import "react-calendar/dist/Calendar.css";
-import TimePicker from "react-time-picker";
 
 const DateTimeForm = ({}) => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -12,7 +11,6 @@ const DateTimeForm = ({}) => {
     const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
         null
     );
-    const [isInitialSlot, setIsInitialSlot] = useState<boolean>(true);
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -31,43 +29,56 @@ const DateTimeForm = ({}) => {
         }
     };
 
+    const timeZones = moment.tz.names();
+
     const handleTimeZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedTimeZone(e.target.value);
     };
-    const timeZones = moment.tz.names();
 
     const handleTimeSlotSelection = (timeSlot: any) => {
         setSelectedTimeSlot(timeSlot);
     };
-    const togglePMView = () => {
-        setIsInitialSlot(!isInitialSlot);
+
+    const getBusinessHoursSlots = () => {
+        const businessOpenET = moment.tz(
+            "08:00 AM",
+            "hh:mm A",
+            "America/New_York"
+        );
+        const businessCloseET = moment.tz(
+            "05:00 PM",
+            "hh:mm A",
+            "America/New_York"
+        );
+
+        const slots = [];
+        let currentSlot = businessOpenET.clone().tz(selectedTimeZone);
+
+        while (currentSlot.isBefore(businessCloseET)) {
+            slots.push(currentSlot.format("hh:mm A"));
+            currentSlot.add(30, "minutes");
+        }
+
+        return slots;
     };
 
-    const timeSlotsAM = [
-        "09:00 AM",
-        "09:30 AM",
-        "10:00 AM",
-        "10:30 AM",
-        "11:00 AM",
-        "11:30 AM",
-    ];
-    const timeSlotsPMInitial = [
-        "12:00 PM",
-        "12:30 PM",
-        "01:00 PM",
-        "01:30 PM",
-        "02:00 PM",
-        "02:30 PM",
-    ];
-    const timeSlotsPMTwo = [
-        "02:00 PM",
-        "02:30 PM",
-        "03:00 PM",
-        "03:30 PM",
-        "04:00 PM",
-        "04:30 PM",
-    ];
-    const timeSlotsPM = isInitialSlot ? timeSlotsPMInitial : timeSlotsPMTwo;
+    const splitTimeSlots = (slots: string[]) => {
+        const timeSlotsAM: string[] = [];
+        const timeSlotsPM: string[] = [];
+
+        slots.forEach((slot) => {
+            if (slot.includes("AM")) {
+                timeSlotsAM.push(slot);
+            } else if (slot.includes("PM")) {
+                timeSlotsPM.push(slot);
+            }
+        });
+
+        return { timeSlotsAM, timeSlotsPM };
+    };
+
+    const availableSlots = getBusinessHoursSlots();
+    const { timeSlotsAM, timeSlotsPM } = splitTimeSlots(availableSlots);
 
     return (
         <div className="date-time-form">
@@ -145,10 +156,7 @@ const DateTimeForm = ({}) => {
                             ))}
                             <button
                                 className="load-more-button"
-                                onClick={togglePMView}
-                                aria-label={`Switch to ${
-                                    isInitialSlot ? "later" : "earlier"
-                                } PM time slots`}
+                                aria-label={"No more PM slots available"}
                             >
                                 Load More
                             </button>
