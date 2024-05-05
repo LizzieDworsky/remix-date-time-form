@@ -118,8 +118,17 @@ body {
     align-items: center;
     gap: 1rem;
 }
+/* Implemented scrolling for over 6 time slots.
+   Determined UX was better with expanding instead. */
+/* .scrollable {
+    max-height: 18rem;
+    overflow-y: auto;
+    border: none;
+    margin-bottom: 5px;
+} */
 /* Individual time slot styling. */
 .time-slot-button {
+    margin: 3px;
     width: 150px;
     padding: 0.75rem;
     border-radius: 3px;
@@ -132,7 +141,7 @@ body {
     background-color: rgba(0, 87, 179, 0.15);
 }
 /* Load More button styling. */
-.load-more-button {
+.show-more-less-btn {
     border: none;
     padding: none;
     background-color: rgb(255, 255, 255);
@@ -140,8 +149,13 @@ body {
     transition: all 300ms ease-in-out;
     cursor: pointer;
 }
-.load-more-button:hover {
+.show-more-less-btn:hover {
     color: rgb(0, 86, 179);
+}
+.no-slots-p {
+    width: 155px;
+    text-align: center;
+    padding: 10px;
 }
 /* Select Date button styling */
 .select-date-time-btn {

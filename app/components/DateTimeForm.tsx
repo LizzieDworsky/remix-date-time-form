@@ -11,6 +11,8 @@ const DateTimeForm = ({}) => {
     const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
         null
     );
+    const [showAllAMSlots, setShowAllAMSlots] = useState<boolean>(false);
+    const [showAllPMSlots, setShowAllPMSlots] = useState<boolean>(false);
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -121,45 +123,74 @@ const DateTimeForm = ({}) => {
                     <div className="time-slots-columns">
                         <div className="time-slot">
                             <h4>AM</h4>
-                            {timeSlotsAM.map((slot) => (
+                            <div className="scrollable">
+                                {/* Class for scrolling implementation. */}
+
+                                {timeSlotsAM.length > 0 ? (
+                                    timeSlotsAM.map((slot) => (
+                                        <button
+                                            className="time-slot-button"
+                                            key={slot}
+                                            onClick={() =>
+                                                handleTimeSlotSelection(slot)
+                                            }
+                                            aria-label={`Select ${slot} as the starting time.`}
+                                        >
+                                            {slot}
+                                        </button>
+                                    ))
+                                ) : (
+                                    <p className="no-slots-p">
+                                        No AM times available.
+                                    </p>
+                                )}
+                            </div>
+                            {timeSlotsAM.length > 6 && (
                                 <button
-                                    className="time-slot-button"
-                                    key={slot}
+                                    className="show-more-less-btn"
+                                    aria-label={"No more AM slots available"}
                                     onClick={() =>
-                                        handleTimeSlotSelection(slot)
+                                        setShowAllAMSlots(!showAllAMSlots)
                                     }
-                                    aria-label={`Select ${slot} as the starting time.`}
                                 >
-                                    {slot}
+                                    {showAllAMSlots ? "Show Less" : "Show More"}
                                 </button>
-                            ))}
-                            <button
-                                className="load-more-button"
-                                aria-label="No more AM slots available"
-                            >
-                                Load More
-                            </button>
+                            )}
                         </div>
                         <div className="time-slot">
                             <h4>PM</h4>
-                            {timeSlotsPM.map((slot) => (
+                            <div className="scrollable">
+                                {/* Class for scrolling implementation. */}
+                                {timeSlotsPM.length > 0 ? (
+                                    timeSlotsPM.map((slot) => (
+                                        <button
+                                            className="time-slot-button"
+                                            key={slot}
+                                            onClick={() =>
+                                                handleTimeSlotSelection(slot)
+                                            }
+                                            aria-label={`Select ${slot} as the starting time.`}
+                                        >
+                                            {slot}
+                                        </button>
+                                    ))
+                                ) : (
+                                    <p className="no-slots-p">
+                                        No PM times available.
+                                    </p>
+                                )}
+                            </div>
+                            {timeSlotsPM.length > 6 && (
                                 <button
-                                    className="time-slot-button"
-                                    key={slot}
+                                    className="show-more-less-btn"
+                                    aria-label={"No more PM slots available"}
                                     onClick={() =>
-                                        handleTimeSlotSelection(slot)
+                                        setShowAllPMSlots(!showAllPMSlots)
                                     }
-                                    aria-label={`Select ${slot} as the starting time.`}
                                 >
-                                    {slot}
+                                    {showAllPMSlots ? "Show Less" : "Show More"}
                                 </button>
-                            ))}
-                            <button
-                                className="load-more-button"
-                                aria-label={"No more PM slots available"}
-                            >
-                                Load More
-                            </button>
+                            )}
                         </div>
                     </div>
                 </div>
