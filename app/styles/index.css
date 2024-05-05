@@ -38,9 +38,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%;
+    width: 90%;
     margin: 2rem auto;
-    max-width: 750px;
+    max-width: 50rem;
     background-color: white;
     padding: 2rem;
     border-radius: 25px;
@@ -65,7 +65,6 @@ body {
 .date-time-form h4 {
     margin: 0;
 }
-
 /* Customizing the look for the react calendar component. */
 .react-calendar {
     border: none !important;
@@ -126,6 +125,7 @@ body {
     border: none;
     margin-bottom: 5px;
 } */
+/* CSS styles for expanding and collapsing time slots. */
 .slot-container {
     overflow: hidden;
     transition: all 300ms ease-in-out;
@@ -149,6 +149,14 @@ body {
 }
 .time-slot-button:hover {
     background-color: rgba(0, 87, 179, 0.15);
+}
+/* Time slot highlight for selected one. */
+.active-time-slot {
+    background-color: rgb(0, 123, 255);
+    color: rgb(255, 255, 255);
+}
+.active-time-slot:hover {
+    background-color: rgb(0, 86, 179);
 }
 /* Load More button styling. */
 .show-more-less-btn {

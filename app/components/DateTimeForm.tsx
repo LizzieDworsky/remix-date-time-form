@@ -139,7 +139,11 @@ const DateTimeForm = ({}) => {
                                 {timeSlotsAM.length > 0 ? (
                                     timeSlotsAM.map((slot) => (
                                         <button
-                                            className="time-slot-button"
+                                            className={`time-slot-button ${
+                                                selectedTimeSlot === slot
+                                                    ? "active-time-slot"
+                                                    : ""
+                                            }`}
                                             key={slot}
                                             onClick={() =>
                                                 handleTimeSlotSelection(slot)
@@ -178,7 +182,11 @@ const DateTimeForm = ({}) => {
                                 {timeSlotsPM.length > 0 ? (
                                     timeSlotsPM.map((slot) => (
                                         <button
-                                            className="time-slot-button"
+                                            className={`time-slot-button ${
+                                                selectedTimeSlot === slot
+                                                    ? "active-time-slot"
+                                                    : ""
+                                            }`}
                                             key={slot}
                                             onClick={() =>
                                                 handleTimeSlotSelection(slot)
