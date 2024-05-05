@@ -65,17 +65,23 @@ const DateTimeForm = ({}) => {
     };
 
     const splitTimeSlots = (slots: string[]) => {
+        const now = moment().tz(selectedTimeZone);
         const timeSlotsAM: string[] = [];
         const timeSlotsPM: string[] = [];
-
         slots.forEach((slot) => {
-            if (slot.includes("AM")) {
-                timeSlotsAM.push(slot);
-            } else if (slot.includes("PM")) {
-                timeSlotsPM.push(slot);
+            const slotTime = moment.tz(
+                `${moment(selectedDate).format("YYYY-MM-DD")} ${slot}`,
+                "YYYY-MM-DD hh:mm A",
+                selectedTimeZone
+            );
+            if (slotTime.isAfter(now)) {
+                if (slot.includes("AM")) {
+                    timeSlotsAM.push(slot);
+                } else if (slot.includes("PM")) {
+                    timeSlotsPM.push(slot);
+                }
             }
         });
-
         return { timeSlotsAM, timeSlotsPM };
     };
 
