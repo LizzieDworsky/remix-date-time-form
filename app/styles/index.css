@@ -108,7 +108,7 @@ body {
 .time-slots-columns {
     display: flex;
     justify-content: space-around;
-    gap: 2rem;
+    gap: 3.5rem;
     width: 100%;
     margin-bottom: 1rem;
 }
@@ -126,6 +126,16 @@ body {
     border: none;
     margin-bottom: 5px;
 } */
+.slot-container {
+    overflow: hidden;
+    transition: all 300ms ease-in-out;
+}
+.collapsed {
+    height: 17.5rem;
+}
+.expanded {
+    height: auto;
+}
 /* Individual time slot styling. */
 .time-slot-button {
     margin: 3px;

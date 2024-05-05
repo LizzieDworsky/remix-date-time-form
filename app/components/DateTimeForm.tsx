@@ -123,8 +123,12 @@ const DateTimeForm = ({}) => {
                     <div className="time-slots-columns">
                         <div className="time-slot">
                             <h4>AM</h4>
-                            <div className="scrollable">
-                                {/* Class for scrolling implementation. */}
+                            <div
+                                className={`slot-container ${
+                                    showAllAMSlots ? "expanded" : "collapsed"
+                                }`}
+                            >
+                                {/* Add "scrollable" class for scrolling implementation. */}
 
                                 {timeSlotsAM.length > 0 ? (
                                     timeSlotsAM.map((slot) => (
@@ -159,8 +163,12 @@ const DateTimeForm = ({}) => {
                         </div>
                         <div className="time-slot">
                             <h4>PM</h4>
-                            <div className="scrollable">
-                                {/* Class for scrolling implementation. */}
+                            <div
+                                className={`slot-container ${
+                                    showAllPMSlots ? "expanded" : "collapsed"
+                                }`}
+                            >
+                                {/* Add "scrollable" class for scrolling implementation. */}
                                 {timeSlotsPM.length > 0 ? (
                                     timeSlotsPM.map((slot) => (
                                         <button
