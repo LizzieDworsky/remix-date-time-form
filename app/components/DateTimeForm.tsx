@@ -88,6 +88,38 @@ const DateTimeForm = ({}) => {
     const availableSlots = getBusinessHoursSlots();
     const { timeSlotsAM, timeSlotsPM } = splitTimeSlots(availableSlots);
 
+    const mapTimeSlots = (timeSlotArr: string[]) => {
+        return timeSlotArr.map((slot) => (
+            <button
+                className={`time-slot-button ${
+                    selectedTimeSlot === slot ? "active-time-slot" : ""
+                }`}
+                key={slot}
+                onClick={() => handleTimeSlotSelection(slot)}
+                aria-label={`Select ${slot} as the starting time.`}
+            >
+                {slot}
+            </button>
+        ));
+    };
+    const showMoreLessBtn = (
+        timeSlotArrLength: number,
+        setShowAllTimeSlots: Function,
+        showAll: boolean
+    ) => {
+        return (
+            timeSlotArrLength > 6 && (
+                <button
+                    className="show-more-less-btn"
+                    aria-label={"No more PM slots available"}
+                    onClick={() => setShowAllTimeSlots(!showAll)}
+                >
+                    {showAll ? "Show Less" : "Show More"}
+                </button>
+            )
+        );
+    };
+
     return (
         <div className="date-time-form">
             <div className="date-time-content">
@@ -137,38 +169,17 @@ const DateTimeForm = ({}) => {
                                 {/* Add "scrollable" class for scrolling implementation. */}
 
                                 {timeSlotsAM.length > 0 ? (
-                                    timeSlotsAM.map((slot) => (
-                                        <button
-                                            className={`time-slot-button ${
-                                                selectedTimeSlot === slot
-                                                    ? "active-time-slot"
-                                                    : ""
-                                            }`}
-                                            key={slot}
-                                            onClick={() =>
-                                                handleTimeSlotSelection(slot)
-                                            }
-                                            aria-label={`Select ${slot} as the starting time.`}
-                                        >
-                                            {slot}
-                                        </button>
-                                    ))
+                                    mapTimeSlots(timeSlotsAM)
                                 ) : (
                                     <p className="no-slots-p">
                                         No AM times available.
                                     </p>
                                 )}
                             </div>
-                            {timeSlotsAM.length > 6 && (
-                                <button
-                                    className="show-more-less-btn"
-                                    aria-label={"No more AM slots available"}
-                                    onClick={() =>
-                                        setShowAllAMSlots(!showAllAMSlots)
-                                    }
-                                >
-                                    {showAllAMSlots ? "Show Less" : "Show More"}
-                                </button>
+                            {showMoreLessBtn(
+                                timeSlotsAM.length,
+                                setShowAllAMSlots,
+                                showAllAMSlots
                             )}
                         </div>
                         <div className="time-slot">
@@ -180,38 +191,17 @@ const DateTimeForm = ({}) => {
                             >
                                 {/* Add "scrollable" class for scrolling implementation. */}
                                 {timeSlotsPM.length > 0 ? (
-                                    timeSlotsPM.map((slot) => (
-                                        <button
-                                            className={`time-slot-button ${
-                                                selectedTimeSlot === slot
-                                                    ? "active-time-slot"
-                                                    : ""
-                                            }`}
-                                            key={slot}
-                                            onClick={() =>
-                                                handleTimeSlotSelection(slot)
-                                            }
-                                            aria-label={`Select ${slot} as the starting time.`}
-                                        >
-                                            {slot}
-                                        </button>
-                                    ))
+                                    mapTimeSlots(timeSlotsPM)
                                 ) : (
                                     <p className="no-slots-p">
                                         No PM times available.
                                     </p>
                                 )}
                             </div>
-                            {timeSlotsPM.length > 6 && (
-                                <button
-                                    className="show-more-less-btn"
-                                    aria-label={"No more PM slots available"}
-                                    onClick={() =>
-                                        setShowAllPMSlots(!showAllPMSlots)
-                                    }
-                                >
-                                    {showAllPMSlots ? "Show Less" : "Show More"}
-                                </button>
+                            {showMoreLessBtn(
+                                timeSlotsPM.length,
+                                setShowAllPMSlots,
+                                showAllPMSlots
                             )}
                         </div>
                     </div>

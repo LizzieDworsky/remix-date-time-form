@@ -107,9 +107,10 @@ body {
 .time-slots-columns {
     display: flex;
     justify-content: space-around;
-    gap: 3.5rem;
+    gap: 2.5rem;
     width: 100%;
     margin-bottom: 1rem;
+    text-align: center;
 }
 .time-slot {
     display: flex;
@@ -189,4 +190,5 @@ body {
     background-color: rgb(0, 86, 179);
 }
 
-/* TODO: Add responsive styles added. */
+/* TODO: Make responsive. */
+/* TODO: Extract colors to variables for consistency and easy updating. */
