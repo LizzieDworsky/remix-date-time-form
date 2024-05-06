@@ -38,9 +38,16 @@ const DateTimeForm = ({}) => {
             showAllPMSlots: false,
         });
 
+    // Initialize Variables
+
+    // Getting the array of timezones from moment library.
+    // Note: this list is a little overwhelming, alternatives should be assessed.
+    const timeZones = moment.tz.names();
     // Initialize today's date for the tileDisabled function.
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+    // Helper Functions
     /**
      * Function to disable past dates in the calendar.
      * @param param0 - Object containing the date and view.
@@ -52,6 +59,8 @@ const DateTimeForm = ({}) => {
         }
         return false;
     };
+
+    // Event Handlers
     /**
      * Event handler for date change.
      * @param date - Selected date.
@@ -65,9 +74,6 @@ const DateTimeForm = ({}) => {
             }));
         }
     };
-    // Getting the array of timezones from moment library.
-    // Note: this list is a little overwhelming, alternatives should be assessed.
-    const timeZones = moment.tz.names();
     /**
      * Event handler for time zone change.
      * @param e - Change event.
@@ -90,6 +96,12 @@ const DateTimeForm = ({}) => {
             selectedTime: timeSlot,
         }));
     };
+    // Event Handling Function placeholder to capture and handle form submission.
+    const handleFormSubmission = () => {
+        console.log(selectedDateTime);
+    };
+
+    // Business Logic
 
     /**
      * Function to get business hours time slots.
@@ -146,10 +158,11 @@ const DateTimeForm = ({}) => {
         });
         return { timeSlotsAM, timeSlotsPM };
     };
-
     // Get available time slots.
     const availableSlots = getBusinessHoursSlots();
     const { timeSlotsAM, timeSlotsPM } = splitTimeSlots(availableSlots);
+
+    // Rendering Functions
     /**
      * Function to map time slots to buttons.
      * @param timeSlotArr - Array of time slots.
@@ -211,10 +224,7 @@ const DateTimeForm = ({}) => {
             )
         );
     };
-    // Event Handling Function placeholder to capture and handle form submission.
-    const handleFormSubmission = () => {
-        console.log(selectedDateTime);
-    };
+
     // Return JSX for DateTimeForm component.
     return (
         <div className="date-time-form">
@@ -311,3 +321,7 @@ const DateTimeForm = ({}) => {
 };
 
 export default DateTimeForm;
+
+// ToDos: Assess alternative time zone options. Currently the selection may be a little overwhelming.
+// ToDos: Revisit getBusinessHoursSlots, refactor for improved reusability.
+// ToDos: Add functionality to blockout dates and times. Backend?
