@@ -3,17 +3,26 @@ import Calendar from "react-calendar";
 import moment from "moment-timezone";
 import "react-calendar/dist/Calendar.css";
 
-// Define types for state objects.
+/**
+ * Interface for the state representing date and time.
+ */
 interface DateTimeState {
     selectedDate: Date;
     selectedTime: string | null;
 }
+/**
+ * Interface for the state representing the visibility of AM and PM time slots.
+ */
 interface ShowAllAMPMSlotsState {
     showAllAMSlots: boolean;
     showAllPMSlots: boolean;
 }
 
-// Define the DateTimeForm component.
+/**
+ * Component for selecting date and time.
+ * @param props - Component properties (none in this case).
+ * @returns JSX element representing the DateTimeForm.
+ */
 const DateTimeForm = ({}) => {
     // State variables
     const [selectedDateTime, setSelectedDateTime] = useState<DateTimeState>({
@@ -28,17 +37,25 @@ const DateTimeForm = ({}) => {
             showAllAMSlots: false,
             showAllPMSlots: false,
         });
+
     // Initialize today's date for the tileDisabled function.
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    // Function for disabling past dates on React Calendar.
+    /**
+     * Function to disable past dates in the calendar.
+     * @param param0 - Object containing the date and view.
+     * @returns Boolean indicating whether the tile is disabled.
+     */
     const tileDisabled = ({ date, view }: any): boolean => {
         if (view === "month") {
             return date < today;
         }
         return false;
     };
-    // Event Handling function for changing the date.
+    /**
+     * Event handler for date change.
+     * @param date - Selected date.
+     */
     const handleDateChange = (date: Date) => {
         if (date instanceof Date) {
             setSelectedDateTime((previousDateTimeState) => ({
@@ -51,7 +68,10 @@ const DateTimeForm = ({}) => {
     // Getting the array of timezones from moment library.
     // Note: this list is a little overwhelming, alternatives should be assessed.
     const timeZones = moment.tz.names();
-    // Event Handling function for changing the timezone.
+    /**
+     * Event handler for time zone change.
+     * @param e - Change event.
+     */
     const handleTimeZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newTz = e.target.value;
         if (timeZones.includes(newTz)) {
@@ -60,15 +80,24 @@ const DateTimeForm = ({}) => {
             console.error(`Invalid Timezone: ${newTz}`);
         }
     };
-    // Event Handling function for changing the time slot.
+    /**
+     * Event handler for selecting a time slot.
+     * @param timeSlot - Selected time slot.
+     */
     const handleTimeSlotSelection = (timeSlot: string) => {
         setSelectedDateTime((previousDateTimeState) => ({
             ...previousDateTimeState,
             selectedTime: timeSlot,
         }));
     };
-    // Function to generate time slots every 30 minutes during the business hours.
+
+    /**
+     * Function to get business hours time slots.
+     * @returns Array of time slots.
+     */
     const getBusinessHoursSlots = () => {
+        // Note: Function is currently setup with hardcorded values to generate time slots every 30 minutes
+        // during business hours 8 am - 5 pm Eastern Time. Update using parameters for reusability and flexibility.
         const businessOpenET = moment.tz(
             "08:00 AM",
             "hh:mm A",
@@ -90,7 +119,11 @@ const DateTimeForm = ({}) => {
 
         return slots;
     };
-    // Function to split time slots into AM and PM arrays.
+    /**
+     * Function to split time slots into AM and PM arrays.
+     * @param slots - Array of time slots.
+     * @returns Object containing AM and PM time slot arrays.
+     */
     const splitTimeSlots = (slots: string[]) => {
         const now = moment().tz(selectedTimeZone);
         const timeSlotsAM: string[] = [];
@@ -117,7 +150,11 @@ const DateTimeForm = ({}) => {
     // Get available time slots.
     const availableSlots = getBusinessHoursSlots();
     const { timeSlotsAM, timeSlotsPM } = splitTimeSlots(availableSlots);
-    // Function to map time slots to buttons for UI.
+    /**
+     * Function to map time slots to buttons.
+     * @param timeSlotArr - Array of time slots.
+     * @returns JSX representing time slot buttons.
+     */
     const mapTimeSlots = (timeSlotArr: string[]) => {
         return timeSlotArr.map((slot) => {
             const isSelected = selectedDateTime.selectedTime === slot;
@@ -136,7 +173,12 @@ const DateTimeForm = ({}) => {
             );
         });
     };
-    // Function to render Show More/Show Less button
+    /**
+     * Function to render Show More/Less button.
+     * @param {number} timeSlotArrLength - Length of time slot array.
+     * @param {string} amPm - AM or PM indicator.
+     * @returns {(JSX.Element | null)} JSX representing the Show More/Less button, or null if timeSlotArrLength is not greater than 6.
+     */
     const showMoreLessBtn = (timeSlotArrLength: number, amPm: string) => {
         const showAll =
             amPm === "AM"
