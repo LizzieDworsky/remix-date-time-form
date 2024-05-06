@@ -3,16 +3,28 @@ import Calendar from "react-calendar";
 import moment from "moment-timezone";
 import "react-calendar/dist/Calendar.css";
 
+interface DateTimeState {
+    selectedDate: Date;
+    selectedTime: string | null;
+}
+interface ShowAllAMPMSlotsState {
+    showAllAMSlots: boolean;
+    showAllPMSlots: boolean;
+}
+
 const DateTimeForm = ({}) => {
-    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+    const [selectedDateTime, setSelectedDateTime] = useState<DateTimeState>({
+        selectedDate: new Date(),
+        selectedTime: null,
+    });
     const [selectedTimeZone, setSelectedTimeZone] = useState<string>(
         moment.tz.guess()
     );
-    const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
-        null
-    );
-    const [showAllAMSlots, setShowAllAMSlots] = useState<boolean>(false);
-    const [showAllPMSlots, setShowAllPMSlots] = useState<boolean>(false);
+    const [showAllAMPMSlots, setShowAllAMPMSlots] =
+        useState<ShowAllAMPMSlotsState>({
+            showAllAMSlots: false,
+            showAllPMSlots: false,
+        });
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -26,19 +38,30 @@ const DateTimeForm = ({}) => {
 
     const handleDateChange = (date: Date) => {
         if (date instanceof Date) {
-            setSelectedDate(date);
-            setSelectedTimeSlot(null);
+            setSelectedDateTime((previousDateTimeState) => ({
+                ...previousDateTimeState,
+                selectedDate: date,
+                selectedTimeSlot: null,
+            }));
         }
     };
 
     const timeZones = moment.tz.names();
 
     const handleTimeZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedTimeZone(e.target.value);
+        const newTz = e.target.value;
+        if (timeZones.includes(newTz)) {
+            setSelectedTimeZone(newTz);
+        } else {
+            console.error(`Invalid Timezone: ${newTz}`);
+        }
     };
 
-    const handleTimeSlotSelection = (timeSlot: any) => {
-        setSelectedTimeSlot(timeSlot);
+    const handleTimeSlotSelection = (timeSlot: string) => {
+        setSelectedDateTime((previousDateTimeState) => ({
+            ...previousDateTimeState, // Copy the previous state
+            selectedTime: timeSlot, // Update the selectedTime property
+        }));
     };
 
     const getBusinessHoursSlots = () => {
@@ -70,7 +93,9 @@ const DateTimeForm = ({}) => {
         const timeSlotsPM: string[] = [];
         slots.forEach((slot) => {
             const slotTime = moment.tz(
-                `${moment(selectedDate).format("YYYY-MM-DD")} ${slot}`,
+                `${moment(selectedDateTime.selectedDate).format(
+                    "YYYY-MM-DD"
+                )} ${slot}`,
                 "YYYY-MM-DD hh:mm A",
                 selectedTimeZone
             );
@@ -89,36 +114,57 @@ const DateTimeForm = ({}) => {
     const { timeSlotsAM, timeSlotsPM } = splitTimeSlots(availableSlots);
 
     const mapTimeSlots = (timeSlotArr: string[]) => {
-        return timeSlotArr.map((slot) => (
-            <button
-                className={`time-slot-button ${
-                    selectedTimeSlot === slot ? "active-time-slot" : ""
-                }`}
-                key={slot}
-                onClick={() => handleTimeSlotSelection(slot)}
-                aria-label={`Select ${slot} as the starting time.`}
-            >
-                {slot}
-            </button>
-        ));
+        return timeSlotArr.map((slot) => {
+            const isSelected = selectedDateTime.selectedTime === slot;
+            const buttonClass = `time-slot-button ${
+                isSelected ? "active-time-slot" : ""
+            }`;
+            return (
+                <button
+                    className={buttonClass}
+                    key={slot}
+                    onClick={() => handleTimeSlotSelection(slot)}
+                    aria-label={`Select ${slot} as the starting time.`}
+                >
+                    {slot}
+                </button>
+            );
+        });
     };
-    const showMoreLessBtn = (
-        timeSlotArrLength: number,
-        setShowAllTimeSlots: Function,
-        showAll: boolean
-    ) => {
+    const showMoreLessBtn = (timeSlotArrLength: number, amPm: string) => {
+        const showAll =
+            amPm === "AM"
+                ? showAllAMPMSlots.showAllAMSlots
+                : showAllAMPMSlots.showAllPMSlots;
+
+        const setAMPM = () => {
+            setShowAllAMPMSlots((prevState) => ({
+                ...prevState,
+                showAllAMSlots:
+                    amPm === "AM"
+                        ? !prevState.showAllAMSlots
+                        : prevState.showAllAMSlots,
+                showAllPMSlots:
+                    amPm === "PM"
+                        ? !prevState.showAllPMSlots
+                        : prevState.showAllPMSlots,
+            }));
+        };
+
         return (
             timeSlotArrLength > 6 && (
                 <button
                     className="show-more-less-btn"
-                    aria-label={"No more PM slots available"}
-                    onClick={() => setShowAllTimeSlots(!showAll)}
+                    aria-label={`Toggle display of ${amPm} time slots.`}
+                    onClick={() => setAMPM()}
                 >
                     {showAll ? "Show Less" : "Show More"}
                 </button>
             )
         );
     };
+
+    const handleFormSubmission = () => {};
 
     return (
         <div className="date-time-form">
@@ -130,7 +176,7 @@ const DateTimeForm = ({}) => {
                             tileDisabled={tileDisabled}
                             selectRange={false}
                             onChange={(date) => handleDateChange(date as Date)}
-                            value={selectedDate}
+                            value={selectedDateTime.selectedDate}
                             calendarType="gregory"
                             aria-label="Calendar to select appointment date."
                         />
@@ -150,10 +196,10 @@ const DateTimeForm = ({}) => {
                     </div>
                 </div>
                 <div className="time-slots-container">
-                    {selectedDate && (
+                    {selectedDateTime.selectedDate && (
                         <h3>
                             Available Starting times for{" "}
-                            {moment(selectedDate)
+                            {moment(selectedDateTime.selectedDate)
                                 .tz(selectedTimeZone)
                                 .format("ddd, MMMM D, YYYY")}
                         </h3>
@@ -163,7 +209,9 @@ const DateTimeForm = ({}) => {
                             <h4>AM</h4>
                             <div
                                 className={`slot-container ${
-                                    showAllAMSlots ? "expanded" : "collapsed"
+                                    showAllAMPMSlots.showAllAMSlots
+                                        ? "expanded"
+                                        : "collapsed"
                                 }`}
                             >
                                 {/* Add "scrollable" class for scrolling implementation. */}
@@ -176,17 +224,15 @@ const DateTimeForm = ({}) => {
                                     </p>
                                 )}
                             </div>
-                            {showMoreLessBtn(
-                                timeSlotsAM.length,
-                                setShowAllAMSlots,
-                                showAllAMSlots
-                            )}
+                            {showMoreLessBtn(timeSlotsAM.length, "AM")}
                         </div>
                         <div className="time-slot">
                             <h4>PM</h4>
                             <div
                                 className={`slot-container ${
-                                    showAllPMSlots ? "expanded" : "collapsed"
+                                    showAllAMPMSlots.showAllPMSlots
+                                        ? "expanded"
+                                        : "collapsed"
                                 }`}
                             >
                                 {/* Add "scrollable" class for scrolling implementation. */}
@@ -198,11 +244,7 @@ const DateTimeForm = ({}) => {
                                     </p>
                                 )}
                             </div>
-                            {showMoreLessBtn(
-                                timeSlotsPM.length,
-                                setShowAllPMSlots,
-                                showAllPMSlots
-                            )}
+                            {showMoreLessBtn(timeSlotsPM.length, "PM")}
                         </div>
                     </div>
                 </div>
