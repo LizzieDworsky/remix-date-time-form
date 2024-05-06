@@ -3,6 +3,7 @@ import Calendar from "react-calendar";
 import moment from "moment-timezone";
 import "react-calendar/dist/Calendar.css";
 
+// Define types for state objects.
 interface DateTimeState {
     selectedDate: Date;
     selectedTime: string | null;
@@ -12,7 +13,9 @@ interface ShowAllAMPMSlotsState {
     showAllPMSlots: boolean;
 }
 
+// Define the DateTimeForm component.
 const DateTimeForm = ({}) => {
+    // State variables
     const [selectedDateTime, setSelectedDateTime] = useState<DateTimeState>({
         selectedDate: new Date(),
         selectedTime: null,
@@ -25,29 +28,30 @@ const DateTimeForm = ({}) => {
             showAllAMSlots: false,
             showAllPMSlots: false,
         });
-
+    // Initialize today's date for the tileDisabled function.
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
+    // Function for disabling past dates on React Calendar.
     const tileDisabled = ({ date, view }: any): boolean => {
         if (view === "month") {
             return date < today;
         }
         return false;
     };
-
+    // Event Handling function for changing the date.
     const handleDateChange = (date: Date) => {
         if (date instanceof Date) {
             setSelectedDateTime((previousDateTimeState) => ({
                 ...previousDateTimeState,
                 selectedDate: date,
-                selectedTimeSlot: null,
+                selectedTime: null,
             }));
         }
     };
-
+    // Getting the array of timezones from moment library.
+    // Note: this list is a little overwhelming, alternatives should be assessed.
     const timeZones = moment.tz.names();
-
+    // Event Handling function for changing the timezone.
     const handleTimeZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newTz = e.target.value;
         if (timeZones.includes(newTz)) {
@@ -56,14 +60,14 @@ const DateTimeForm = ({}) => {
             console.error(`Invalid Timezone: ${newTz}`);
         }
     };
-
+    // Event Handling function for changing the time slot.
     const handleTimeSlotSelection = (timeSlot: string) => {
         setSelectedDateTime((previousDateTimeState) => ({
-            ...previousDateTimeState, // Copy the previous state
-            selectedTime: timeSlot, // Update the selectedTime property
+            ...previousDateTimeState,
+            selectedTime: timeSlot,
         }));
     };
-
+    // Function to generate time slots every 30 minutes during the business hours.
     const getBusinessHoursSlots = () => {
         const businessOpenET = moment.tz(
             "08:00 AM",
@@ -86,7 +90,7 @@ const DateTimeForm = ({}) => {
 
         return slots;
     };
-
+    // Function to split time slots into AM and PM arrays.
     const splitTimeSlots = (slots: string[]) => {
         const now = moment().tz(selectedTimeZone);
         const timeSlotsAM: string[] = [];
@@ -110,9 +114,10 @@ const DateTimeForm = ({}) => {
         return { timeSlotsAM, timeSlotsPM };
     };
 
+    // Get available time slots.
     const availableSlots = getBusinessHoursSlots();
     const { timeSlotsAM, timeSlotsPM } = splitTimeSlots(availableSlots);
-
+    // Function to map time slots to buttons for UI.
     const mapTimeSlots = (timeSlotArr: string[]) => {
         return timeSlotArr.map((slot) => {
             const isSelected = selectedDateTime.selectedTime === slot;
@@ -131,6 +136,7 @@ const DateTimeForm = ({}) => {
             );
         });
     };
+    // Function to render Show More/Show Less button
     const showMoreLessBtn = (timeSlotArrLength: number, amPm: string) => {
         const showAll =
             amPm === "AM"
@@ -163,9 +169,11 @@ const DateTimeForm = ({}) => {
             )
         );
     };
-
-    const handleFormSubmission = () => {};
-
+    // Event Handling Function placeholder to capture and handle form submission.
+    const handleFormSubmission = () => {
+        console.log(selectedDateTime);
+    };
+    // Return JSX for DateTimeForm component.
     return (
         <div className="date-time-form">
             <div className="date-time-content">
@@ -252,6 +260,7 @@ const DateTimeForm = ({}) => {
             <button
                 className="select-date-time-btn"
                 aria-label="Submit the selected date and time for the appointment."
+                onClick={handleFormSubmission}
             >
                 Select Date
             </button>
