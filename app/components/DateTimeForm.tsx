@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Dispatch, SetStateAction } from "react";
+import { DateTimeState } from "../types";
 import Calendar from "react-calendar";
 import moment from "moment-timezone";
 import "react-calendar/dist/Calendar.css";
@@ -7,13 +8,6 @@ import "react-calendar/dist/Calendar.css";
 interface DateTimeFormProps {
     selectedDateTime: DateTimeState;
     setSelectedDateTime: Dispatch<SetStateAction<DateTimeState>>;
-}
-/**
- * Interface for the state representing date and time.
- */
-interface DateTimeState {
-    selectedDate: Date;
-    selectedTime: string | null;
 }
 /**
  * Interface for the state representing the visibility of AM and PM time slots.

@@ -2,14 +2,7 @@
 import { useState } from "react";
 import DateTimeForm from "./DateTimeForm";
 import UserForm from "./UserForm";
-
-/**
- * Interface for the state representing date and time.
- */
-interface DateTimeState {
-    selectedDate: Date;
-    selectedTime: string | null;
-}
+import { DateTimeState } from "../types";
 
 const AppointmentForm = () => {
     const [showDateTimeForm, setShowDateTimeForm] = useState(true);
