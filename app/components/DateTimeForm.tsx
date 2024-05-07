@@ -27,9 +27,6 @@ const DateTimeForm = ({
     setSelectedDateTime,
 }: DateTimeFormProps) => {
     // State variables
-    const [selectedTimeZone, setSelectedTimeZone] = useState<string>(
-        moment.tz.guess()
-    );
     const [showAllAMPMSlots, setShowAllAMPMSlots] =
         useState<ShowAllAMPMSlotsState>({
             showAllAMSlots: false,
@@ -79,7 +76,10 @@ const DateTimeForm = ({
     const handleTimeZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newTz = e.target.value;
         if (timeZones.includes(newTz)) {
-            setSelectedTimeZone(newTz);
+            setSelectedDateTime((previousDateTimeState) => ({
+                ...previousDateTimeState,
+                selectedTimeZone: newTz,
+            }));
         } else {
             console.error(`Invalid Timezone: ${newTz}`);
         }
@@ -116,7 +116,9 @@ const DateTimeForm = ({
         );
 
         const slots = [];
-        let currentSlot = businessOpenET.clone().tz(selectedTimeZone);
+        let currentSlot = businessOpenET
+            .clone()
+            .tz(selectedDateTime.selectedTimeZone);
 
         while (currentSlot.isBefore(businessCloseET)) {
             slots.push(currentSlot.format("hh:mm A"));
@@ -131,7 +133,7 @@ const DateTimeForm = ({
      * @returns Object containing AM and PM time slot arrays.
      */
     const splitTimeSlots = (slots: string[]) => {
-        const now = moment().tz(selectedTimeZone);
+        const now = moment().tz(selectedDateTime.selectedTimeZone);
         const timeSlotsAM: string[] = [];
         const timeSlotsPM: string[] = [];
         slots.forEach((slot) => {
@@ -140,7 +142,7 @@ const DateTimeForm = ({
                     "YYYY-MM-DD"
                 )} ${slot}`,
                 "YYYY-MM-DD hh:mm A",
-                selectedTimeZone
+                selectedDateTime.selectedTimeZone
             );
             if (slotTime.isAfter(now)) {
                 if (slot.includes("AM")) {
@@ -236,7 +238,7 @@ const DateTimeForm = ({
                     <label htmlFor="timezone">Change Timezone:</label>
                     <select
                         id="timezone"
-                        value={selectedTimeZone}
+                        value={selectedDateTime.selectedTimeZone}
                         onChange={handleTimeZoneChange}
                         aria-label="Select your timezone."
                     >
@@ -253,7 +255,7 @@ const DateTimeForm = ({
                     <h3>
                         Available Starting times for{" "}
                         {moment(selectedDateTime.selectedDate)
-                            .tz(selectedTimeZone)
+                            .tz(selectedDateTime.selectedTimeZone)
                             .format("ddd, MMMM D, YYYY")}
                     </h3>
                 )}

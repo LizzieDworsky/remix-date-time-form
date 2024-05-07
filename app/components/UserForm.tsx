@@ -15,7 +15,12 @@ const UserForm = ({ selectedDateTime, setShowDateTimeForm }: UserFormProps) => {
             <div className="date-time-bar">
                 <IoMdArrowRoundBack onClick={() => setShowDateTimeForm(true)} />
                 <div className="calendar-details-container">
-                    <p>{`${selectedDateTime.selectedTime}`}</p>
+                    <p>{`${selectedDateTime.selectedTime} ${moment
+                        .tz(
+                            selectedDateTime.selectedDate,
+                            selectedDateTime.selectedTimeZone
+                        )
+                        .zoneAbbr()}`}</p>
                     <p>
                         {moment(selectedDateTime.selectedDate).format(
                             "ddd, MMMM D, YYYY"
