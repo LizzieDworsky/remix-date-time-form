@@ -6,10 +6,10 @@ import { DateTimeState } from "../types";
 import moment from "moment-timezone";
 
 const AppointmentForm = () => {
-    const [showDateTimeForm, setShowDateTimeForm] = useState(true);
+    const [showDateTimeForm, setShowDateTimeForm] = useState(false);
     const [selectedDateTime, setSelectedDateTime] = useState<DateTimeState>({
         selectedDate: new Date(),
-        selectedTime: null,
+        selectedTime: "10:30 AM",
         selectedTimeZone: moment.tz.guess(),
     });
 

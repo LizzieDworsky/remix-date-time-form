@@ -190,5 +190,39 @@ body {
     background-color: rgb(0, 86, 179);
 }
 
+.user-form-container {
+    width: 100%;
+    color: #2a3135;
+}
+
+.date-time-bar {
+    width: 100%;
+    align-items: center;
+    border-bottom: 1px solid #e1e1e1;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 10px;
+}
+
+.calendar-details-container {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    margin: 0 3rem;
+}
+
+.calendar-details-container p {
+    font-weight: 600;
+}
+.back-arrow {
+    font-size: 24px;
+}
+.icon {
+    margin: -2px 0.5rem;
+}
+
 /* TODO: Make responsive. */
 /* TODO: Extract colors to variables for consistency and easy updating. */

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { DateTimeState } from "../types";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaArrowLeft, FaRegClock, FaRegCalendar } from "react-icons/fa";
 import moment from "moment-timezone";
 
 interface UserFormProps {
@@ -11,17 +11,24 @@ interface UserFormProps {
 const UserForm = ({ selectedDateTime, setShowDateTimeForm }: UserFormProps) => {
     console.log(selectedDateTime);
     return (
-        <div>
+        <div className="user-form-container">
             <div className="date-time-bar">
-                <IoMdArrowRoundBack onClick={() => setShowDateTimeForm(true)} />
+                <FaArrowLeft
+                    className="back-arrow"
+                    onClick={() => setShowDateTimeForm(true)}
+                />
                 <div className="calendar-details-container">
-                    <p>{`${selectedDateTime.selectedTime} ${moment
-                        .tz(
-                            selectedDateTime.selectedDate,
-                            selectedDateTime.selectedTimeZone
-                        )
-                        .zoneAbbr()}`}</p>
                     <p>
+                        <FaRegClock className="icon" />{" "}
+                        {`${selectedDateTime.selectedTime} ${moment
+                            .tz(
+                                selectedDateTime.selectedDate,
+                                selectedDateTime.selectedTimeZone
+                            )
+                            .zoneAbbr()} - 30 Minutes`}
+                    </p>
+                    <p>
+                        <FaRegCalendar className="icon" />{" "}
                         {moment(selectedDateTime.selectedDate).format(
                             "ddd, MMMM D, YYYY"
                         )}
