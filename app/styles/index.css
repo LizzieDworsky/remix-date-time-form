@@ -55,14 +55,14 @@ body {
     width: 100%;
 }
 /* Setting the look for the form headers. */
-.date-time-form h3,
-.date-time-form h4 {
+.date-time-content h3,
+.date-time-content h4 {
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 1rem;
     text-align: center;
 }
-.date-time-form h4 {
+.date-time-content h4 {
     margin: 0;
 }
 /* Customizing the look for the react calendar component. */
