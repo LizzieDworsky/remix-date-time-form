@@ -59,51 +59,53 @@ const UserForm = ({ selectedDateTime, setShowDateTimeForm }: UserFormProps) => {
                     </p>
                 </div>
             </div>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="firstName">First Name *</label>
-                    <input
-                        type="text"
-                        name="firstName"
-                        value={userDetails.firstName}
-                        onChange={(e) => handleChange(e)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="lastName">Last Name *</label>
-                    <input
-                        type="text"
-                        name="lastName"
-                        value={userDetails.lastName}
-                        onChange={(e) => handleChange(e)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="email">Email *</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={userDetails.email}
-                        onChange={(e) => handleChange(e)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="phone">Phone *</label>
-                    <input
-                        type="tel"
-                        name="phone"
-                        value={userDetails.phone}
-                        onChange={(e) => handleChange(e)}
-                        required
-                    />
-                </div>
-                <button className="submit-forms-btn" type="submit">
-                    Book Now
-                </button>
-            </form>
+            <div className="user-details-form-container">
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor="firstName">First Name *</label>
+                        <input
+                            type="text"
+                            name="firstName"
+                            value={userDetails.firstName}
+                            onChange={(e) => handleChange(e)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="lastName">Last Name *</label>
+                        <input
+                            type="text"
+                            name="lastName"
+                            value={userDetails.lastName}
+                            onChange={(e) => handleChange(e)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email">Email *</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={userDetails.email}
+                            onChange={(e) => handleChange(e)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="phone">Phone *</label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            value={userDetails.phone}
+                            onChange={(e) => handleChange(e)}
+                            required
+                        />
+                    </div>
+                    <button className="submit-forms-btn" type="submit">
+                        Book Now
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

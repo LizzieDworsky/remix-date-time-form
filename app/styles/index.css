@@ -223,6 +223,51 @@ body {
 .icon {
     margin: -2px 0.5rem;
 }
+.user-details-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.user-details-form-container form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.user-details-form-container label {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    grid-column: span 1;
+}
+.user-details-form-container input {
+    grid-column: span 1;
+    width: calc(100% - 20px);
+}
+.user-details-form-container div {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 0;
+}
+.user-details-form-container div:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+.user-details-form-container div:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+}
+.user-details-form-container div:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+}
+.user-details-form-container div:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+}
+.submit-forms-btn {
+    margin-top: 20px;
+}
 
 /* TODO: Make responsive. */
 /* TODO: Extract colors to variables for consistency and easy updating. */
