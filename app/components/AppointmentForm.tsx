@@ -26,13 +26,15 @@ const AppointmentForm = () => {
                     setShowDateTimeForm={setShowDateTimeForm}
                 />
             )}
-            <button
-                className="select-date-time-btn"
-                aria-label="Submit the selected date and time for the appointment."
-                onClick={() => setShowDateTimeForm(false)}
-            >
-                Select Date
-            </button>
+            {showDateTimeForm ? (
+                <button
+                    className="submit-forms-btn"
+                    aria-label="Submit the selected date and time for the appointment."
+                    onClick={() => setShowDateTimeForm(false)}
+                >
+                    Select Date
+                </button>
+            ) : null}
         </div>
     );
 };

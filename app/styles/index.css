@@ -177,7 +177,7 @@ body {
     padding: 10px;
 }
 /* Select Date button styling */
-.select-date-time-btn {
+.submit-forms-btn {
     margin: 3rem;
     background-color: rgb(0, 123, 255);
     color: rgb(255, 255, 255);
@@ -186,7 +186,7 @@ body {
     padding: 20px 40px;
     transition: all 300ms ease-in-out;
 }
-.select-date-time-btn:hover {
+.submit-forms-btn:hover {
     background-color: rgb(0, 86, 179);
 }
 
