@@ -11,12 +11,6 @@ const AppointmentForm = () => {
         selectedTime: null,
     });
 
-    // Event Handling Function placeholder to capture and handle form submission.
-    const handleFormSubmission = () => {
-        console.log(selectedDateTime);
-        setShowDateTimeForm(!showDateTimeForm);
-    };
-
     return (
         <div className="appointment-form">
             {showDateTimeForm ? (
@@ -25,12 +19,15 @@ const AppointmentForm = () => {
                     setSelectedDateTime={setSelectedDateTime}
                 />
             ) : (
-                <UserForm />
+                <UserForm
+                    selectedDateTime={selectedDateTime}
+                    setShowDateTimeForm={setShowDateTimeForm}
+                />
             )}
             <button
                 className="select-date-time-btn"
                 aria-label="Submit the selected date and time for the appointment."
-                onClick={handleFormSubmission}
+                onClick={() => setShowDateTimeForm(false)}
             >
                 Select Date
             </button>
@@ -38,5 +35,4 @@ const AppointmentForm = () => {
     );
 };
 
-// Export the main component
 export default AppointmentForm;
