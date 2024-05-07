@@ -31,7 +31,7 @@ const UserForm = ({ selectedDateTime, setShowDateTimeForm }: UserFormProps) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(userDetails);
-        setUserDetails({ firstName: "", lastName: "", email: "", phone: "" });
+        setShowDateTimeForm(true);
     };
 
     return (
