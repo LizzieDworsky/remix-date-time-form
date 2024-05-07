@@ -34,7 +34,7 @@ body {
     margin-top: 1.5rem;
 }
 /* Creating the rules for the primary contianer. Including setting up the flex, setting the size, etc. */
-.date-time-form {
+.appointment-form {
     display: flex;
     flex-direction: column;
     align-items: center;

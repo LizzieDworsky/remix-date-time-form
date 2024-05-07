@@ -1,8 +1,13 @@
 import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Calendar from "react-calendar";
 import moment from "moment-timezone";
 import "react-calendar/dist/Calendar.css";
 
+interface DateTimeFormProps {
+    selectedDateTime: DateTimeState;
+    setSelectedDateTime: Dispatch<SetStateAction<DateTimeState>>;
+}
 /**
  * Interface for the state representing date and time.
  */
@@ -23,12 +28,11 @@ interface ShowAllAMPMSlotsState {
  * @param props - Component properties (none in this case).
  * @returns JSX element representing the DateTimeForm.
  */
-const DateTimeForm = ({}) => {
+const DateTimeForm = ({
+    selectedDateTime,
+    setSelectedDateTime,
+}: DateTimeFormProps) => {
     // State variables
-    const [selectedDateTime, setSelectedDateTime] = useState<DateTimeState>({
-        selectedDate: new Date(),
-        selectedTime: null,
-    });
     const [selectedTimeZone, setSelectedTimeZone] = useState<string>(
         moment.tz.guess()
     );
@@ -95,10 +99,6 @@ const DateTimeForm = ({}) => {
             ...previousDateTimeState,
             selectedTime: timeSlot,
         }));
-    };
-    // Event Handling Function placeholder to capture and handle form submission.
-    const handleFormSubmission = () => {
-        console.log(selectedDateTime);
     };
 
     // Business Logic
@@ -227,95 +227,86 @@ const DateTimeForm = ({}) => {
 
     // Return JSX for DateTimeForm component.
     return (
-        <div className="date-time-form">
-            <div className="date-time-content">
-                <div>
-                    <h3>Pick a Date and Time</h3>
-                    <div className="calendar-container">
-                        <Calendar
-                            tileDisabled={tileDisabled}
-                            selectRange={false}
-                            onChange={(date) => handleDateChange(date as Date)}
-                            value={selectedDateTime.selectedDate}
-                            calendarType="gregory"
-                            aria-label="Calendar to select appointment date."
-                        />
-                        <label htmlFor="timezone">Change Timezone:</label>
-                        <select
-                            id="timezone"
-                            value={selectedTimeZone}
-                            onChange={handleTimeZoneChange}
-                            aria-label="Select your timezone."
-                        >
-                            {timeZones.map((zone) => (
-                                <option key={zone} value={zone}>
-                                    {zone}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+        <div className="date-time-content">
+            <div>
+                <h3>Pick a Date and Time</h3>
+                <div className="calendar-container">
+                    <Calendar
+                        tileDisabled={tileDisabled}
+                        selectRange={false}
+                        onChange={(date) => handleDateChange(date as Date)}
+                        value={selectedDateTime.selectedDate}
+                        calendarType="gregory"
+                        aria-label="Calendar to select appointment date."
+                    />
+                    <label htmlFor="timezone">Change Timezone:</label>
+                    <select
+                        id="timezone"
+                        value={selectedTimeZone}
+                        onChange={handleTimeZoneChange}
+                        aria-label="Select your timezone."
+                    >
+                        {timeZones.map((zone) => (
+                            <option key={zone} value={zone}>
+                                {zone}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <div className="time-slots-container">
-                    {selectedDateTime.selectedDate && (
-                        <h3>
-                            Available Starting times for{" "}
-                            {moment(selectedDateTime.selectedDate)
-                                .tz(selectedTimeZone)
-                                .format("ddd, MMMM D, YYYY")}
-                        </h3>
-                    )}
-                    <div className="time-slots-columns">
-                        <div className="time-slot">
-                            <h4>AM</h4>
-                            <div
-                                className={`slot-container ${
-                                    showAllAMPMSlots.showAllAMSlots
-                                        ? "expanded"
-                                        : "collapsed"
-                                }`}
-                            >
-                                {/* Add "scrollable" class for scrolling implementation. */}
+            </div>
+            <div className="time-slots-container">
+                {selectedDateTime.selectedDate && (
+                    <h3>
+                        Available Starting times for{" "}
+                        {moment(selectedDateTime.selectedDate)
+                            .tz(selectedTimeZone)
+                            .format("ddd, MMMM D, YYYY")}
+                    </h3>
+                )}
+                <div className="time-slots-columns">
+                    <div className="time-slot">
+                        <h4>AM</h4>
+                        <div
+                            className={`slot-container ${
+                                showAllAMPMSlots.showAllAMSlots
+                                    ? "expanded"
+                                    : "collapsed"
+                            }`}
+                        >
+                            {/* Add "scrollable" class for scrolling implementation. */}
 
-                                {timeSlotsAM.length > 0 ? (
-                                    mapTimeSlots(timeSlotsAM)
-                                ) : (
-                                    <p className="no-slots-p">
-                                        No AM times available.
-                                    </p>
-                                )}
-                            </div>
-                            {showMoreLessBtn(timeSlotsAM.length, "AM")}
+                            {timeSlotsAM.length > 0 ? (
+                                mapTimeSlots(timeSlotsAM)
+                            ) : (
+                                <p className="no-slots-p">
+                                    No AM times available.
+                                </p>
+                            )}
                         </div>
-                        <div className="time-slot">
-                            <h4>PM</h4>
-                            <div
-                                className={`slot-container ${
-                                    showAllAMPMSlots.showAllPMSlots
-                                        ? "expanded"
-                                        : "collapsed"
-                                }`}
-                            >
-                                {/* Add "scrollable" class for scrolling implementation. */}
-                                {timeSlotsPM.length > 0 ? (
-                                    mapTimeSlots(timeSlotsPM)
-                                ) : (
-                                    <p className="no-slots-p">
-                                        No PM times available.
-                                    </p>
-                                )}
-                            </div>
-                            {showMoreLessBtn(timeSlotsPM.length, "PM")}
+                        {showMoreLessBtn(timeSlotsAM.length, "AM")}
+                    </div>
+                    <div className="time-slot">
+                        <h4>PM</h4>
+                        <div
+                            className={`slot-container ${
+                                showAllAMPMSlots.showAllPMSlots
+                                    ? "expanded"
+                                    : "collapsed"
+                            }`}
+                        >
+                            {/* Add "scrollable" class for scrolling implementation. */}
+                            {timeSlotsPM.length > 0 ? (
+                                mapTimeSlots(timeSlotsPM)
+                            ) : (
+                                <p className="no-slots-p">
+                                    No PM times available.
+                                </p>
+                            )}
                         </div>
+                        {showMoreLessBtn(timeSlotsPM.length, "PM")}
                     </div>
                 </div>
             </div>
-            <button
-                className="select-date-time-btn"
-                aria-label="Submit the selected date and time for the appointment."
-                onClick={handleFormSubmission}
-            >
-                Select Date
-            </button>
         </div>
     );
 };

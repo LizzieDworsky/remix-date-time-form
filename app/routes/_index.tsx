@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import DateTimeForm from "~/components/DateTimeForm";
+import AppointmentForm from "../components/AppointmentForm";
 import "../styles/index.css";
 
 export const meta: MetaFunction = () => {
@@ -27,7 +27,7 @@ export default function Index() {
                     <p>123 Anywhere Dr, Anywhere, NY 12345</p>
                 </div>
             </div>
-            <DateTimeForm />
+            <AppointmentForm />
             <div className="footer">
                 <p>We will contact you shortly</p>
             </div>
